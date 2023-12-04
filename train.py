@@ -22,9 +22,10 @@ import logging
 from collections import OrderedDict
 from contextlib import suppress
 from datetime import datetime
-
+import numpy as np
 import torch
 import torch.nn as nn
+import random
 import torchvision.utils
 from torch.nn.parallel import DistributedDataParallel as NativeDDP
 
@@ -82,6 +83,8 @@ parser.add_argument('--dataset', '-d', metavar='NAME', default='',
                     help='dataset type (default: ImageFolder/ImageTar if empty)')
 parser.add_argument('--train-split', metavar='NAME', default='train',
                     help='dataset train split (default: train)')
+parser.add_argument('--rand-subset-frac', '-rsf', default=None,
+                    help='Random subset fraction to train on')
 parser.add_argument('--val-split', metavar='NAME', default='validation',
                     help='dataset validation split (default: validation)')
 parser.add_argument('--model', default='deit_small_patch16_224', type=str, metavar='MODEL',
@@ -524,6 +527,17 @@ def main():
         args.dataset,
         root=args.data_dir, split=args.train_split, is_training=True,
         batch_size=args.batch_size, repeats=args.epoch_repeats)
+    if args.rand_subset_frac is not None:
+        _logger.info(f"Random subset of data is specified to train on, hence using that. Fraction to train on is {args.rand_subset_frac}")
+        _logger.info(f"Length of full dataset is {len(dataset_train)}")
+        len_dataset = len(dataset_train)
+        rand_frac = args.rand_subset_frac
+        subset_idxs = random.sample(range(len_dataset), rand_frac * len_dataset)
+        dataset_train = create_dataset(
+        args.dataset,
+        root=args.data_dir, split=args.train_split, is_training=True,
+        batch_size=args.batch_size, repeats=args.epoch_repeats, subset_idxs = subset_idxs)
+        _logger.info(f"Created subset dataloader of length {len(dataset_train)}")
     dataset_eval = create_dataset(
         args.dataset, root=args.data_dir, split=args.val_split, is_training=False, batch_size=args.batch_size)
 

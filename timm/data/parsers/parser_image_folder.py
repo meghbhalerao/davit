@@ -14,7 +14,7 @@ from .class_map import load_class_map
 from .constants import IMG_EXTENSIONS
 
 
-def find_images_and_targets(folder, types=IMG_EXTENSIONS, class_to_idx=None, leaf_name_only=True, sort=True):
+def find_images_and_targets(folder, types=IMG_EXTENSIONS, class_to_idx=None, leaf_name_only=True, sort=True, subset_idxs = None):
     labels = []
     filenames = []
     for root, subdirs, files in os.walk(folder, topdown=False, followlinks=True):
@@ -33,7 +33,12 @@ def find_images_and_targets(folder, types=IMG_EXTENSIONS, class_to_idx=None, lea
     images_and_targets = [(f, class_to_idx[l]) for f, l in zip(filenames, labels) if l in class_to_idx]
     if sort:
         images_and_targets = sorted(images_and_targets, key=lambda k: natural_key(k[0]))
-    return images_and_targets, class_to_idx
+    
+    if subset_idxs is not None:
+        images_and_targets_subset = [images_and_targets[idx] for idx in subset_idxs]
+        return images_and_targets_subset, class_to_idx
+    else:
+        return images_and_targets, class_to_idx
 
 
 class ParserImageFolder(Parser):
@@ -41,14 +46,15 @@ class ParserImageFolder(Parser):
     def __init__(
             self,
             root,
-            class_map=''):
+            class_map='',
+            subset_idxs = None):
         super().__init__()
 
         self.root = root
         class_to_idx = None
         if class_map:
             class_to_idx = load_class_map(class_map, root)
-        self.samples, self.class_to_idx = find_images_and_targets(root, class_to_idx=class_to_idx)
+        self.samples, self.class_to_idx = find_images_and_targets(root, class_to_idx=class_to_idx, subset_idxs = subset_idxs)
         if len(self.samples) == 0:
             raise RuntimeError(
                 f'Found 0 images in subfolders of {root}. Supported image extensions are {", ".join(IMG_EXTENSIONS)}')

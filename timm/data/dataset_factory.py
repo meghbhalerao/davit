@@ -16,7 +16,7 @@ def _search_split(root, split):
     return root
 
 
-def create_dataset(name, root, split='validation', search_split=True, is_training=False, batch_size=None, **kwargs):
+def create_dataset(name, root, split='validation', search_split=True, is_training=False, batch_size=None, subset_idxs = None, **kwargs):
     name = name.lower()
     if name.startswith('tfds'):
         ds = IterableImageDataset(
@@ -26,5 +26,5 @@ def create_dataset(name, root, split='validation', search_split=True, is_trainin
         kwargs.pop('repeats', 0)  # FIXME currently only Iterable dataset support the repeat multiplier
         if search_split and os.path.isdir(root):
             root = _search_split(root, split)
-        ds = ImageDataset(root, parser=name, **kwargs)
+        ds = ImageDataset(root, parser=name, subset_idxs = subset_idxs, **kwargs)
     return ds

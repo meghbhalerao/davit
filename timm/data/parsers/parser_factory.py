@@ -5,7 +5,7 @@ from .parser_image_tar import ParserImageTar
 from .parser_image_in_tar import ParserImageInTar
 
 
-def create_parser(name, root, split='train', **kwargs):
+def create_parser(name, root, split='train', subset_idxs = None, **kwargs):
     name = name.lower()
     name = name.split('/', 2)
     prefix = ''
@@ -25,5 +25,5 @@ def create_parser(name, root, split='train', **kwargs):
         if os.path.isfile(root) and os.path.splitext(root)[1] == '.tar':
             parser = ParserImageInTar(root, **kwargs)
         else:
-            parser = ParserImageFolder(root, **kwargs)
+            parser = ParserImageFolder(root, subset_idxs = subset_idxs, **kwargs)
     return parser
