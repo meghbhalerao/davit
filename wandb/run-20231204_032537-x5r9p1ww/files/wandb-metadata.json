@@ -1,0 +1,276 @@
+{
+    "os": "Linux-5.4.0-117-generic-x86_64-with-glibc2.31",
+    "python": "3.10.9",
+    "heartbeatAt": "2023-12-04T03:25:38.987361",
+    "startedAt": "2023-12-04T03:25:37.913569",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--local-rank=1",
+        "/data/megh98/projects/dev_folder/smrai-container-documentation/src/data/imagenet",
+        "--rand-subset-frac",
+        "0.1",
+        "--model",
+        "DaViT_tiny",
+        "--batch-size",
+        "512",
+        "--lr",
+        "1e-3",
+        "--native-amp",
+        "--clip-grad",
+        "1.0",
+        "--output",
+        "./outputs/",
+        "--val-split",
+        "val",
+        "--log-wandb"
+    ],
+    "state": "running",
+    "program": "/data/megh98/projects/dev_folder/davit/train.py",
+    "codePath": "train.py",
+    "git": {
+        "remote": "git@github.com:meghbhalerao/davit.git",
+        "commit": "21b53e78b679a71aad4b1a1a0a355692b711b522"
+    },
+    "email": "megh.bhalerao@gmail.com",
+    "root": "/data/megh98/projects/dev_folder/davit",
+    "host": "u124281",
+    "username": "megh98",
+    "executable": "/home/megh98/anaconda3/envs/smrsum/bin/python",
+    "cpu_count": 20,
+    "cpu_count_logical": 40,
+    "cpu_freq": {
+        "current": 1.1171,
+        "min": 1000.0,
+        "max": 3200.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.001,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 2.273,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.844,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.027,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 2.283,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.06,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.001,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 0.999,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.244,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 0.999,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.001,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.001,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.001,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.001,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.639,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.472,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.027,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 2.327,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.054,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.201,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        },
+        {
+            "current": 1.0,
+            "min": 1000.0,
+            "max": 3200.0
+        }
+    ],
+    "disk": {
+        "total": 868.3979263305664,
+        "used": 816.1611785888672
+    },
+    "gpu": "NVIDIA A100 80GB PCIe",
+    "gpu_count": 4,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA A100 80GB PCIe",
+            "memory_total": 85899345920
+        },
+        {
+            "name": "NVIDIA A100 80GB PCIe",
+            "memory_total": 85899345920
+        },
+        {
+            "name": "NVIDIA A100 80GB PCIe",
+            "memory_total": 85899345920
+        },
+        {
+            "name": "NVIDIA A100 80GB PCIe",
+            "memory_total": 85899345920
+        }
+    ],
+    "memory": {
+        "total": 502.58363342285156
+    }
+}

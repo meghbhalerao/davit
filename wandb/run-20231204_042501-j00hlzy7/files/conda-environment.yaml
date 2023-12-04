@@ -1,0 +1,4 @@
+name: smrsum
+channels:
+  - defaults
+prefix: /home/megh98/.conda/envs/smrsum

@@ -25,7 +25,7 @@ from datetime import datetime
 import numpy as np
 import torch
 import torch.nn as nn
-import random
+import random as pyrand
 import torchvision.utils
 from torch.nn.parallel import DistributedDataParallel as NativeDDP
 
@@ -40,7 +40,7 @@ from timm.utils import ApexScaler, NativeScaler
 # from torch.distributed.elastic.multiprocessing.errors import record
 from thop import profile, clever_format
 from fvcore.nn import FlopCountAnalysis, flop_count_table, flop_count_str
-
+import sys
 
 try:
     from apex import amp
@@ -83,7 +83,7 @@ parser.add_argument('--dataset', '-d', metavar='NAME', default='',
                     help='dataset type (default: ImageFolder/ImageTar if empty)')
 parser.add_argument('--train-split', metavar='NAME', default='train',
                     help='dataset train split (default: train)')
-parser.add_argument('--rand-subset-frac', '-rsf', default=None,
+parser.add_argument('--rand-subset-frac', '-rsf', default=None, type = float,
                     help='Random subset fraction to train on')
 parser.add_argument('--val-split', metavar='NAME', default='validation',
                     help='dataset validation split (default: validation)')
@@ -532,7 +532,8 @@ def main():
         _logger.info(f"Length of full dataset is {len(dataset_train)}")
         len_dataset = len(dataset_train)
         rand_frac = args.rand_subset_frac
-        subset_idxs = random.sample(range(len_dataset), rand_frac * len_dataset)
+        _logger.info(f"Random subset fraction to be used is {rand_frac}")
+        subset_idxs = pyrand.sample(range(len_dataset), int(rand_frac * len_dataset))
         dataset_train = create_dataset(
         args.dataset,
         root=args.data_dir, split=args.train_split, is_training=True,
@@ -540,7 +541,7 @@ def main():
         _logger.info(f"Created subset dataloader of length {len(dataset_train)}")
     dataset_eval = create_dataset(
         args.dataset, root=args.data_dir, split=args.val_split, is_training=False, batch_size=args.batch_size)
-
+    _logger.info(f"Length of val dataset is {len(dataset_eval)}")
     # setup mixup / cutmix
     collate_fn = None
     mixup_fn = None
@@ -708,6 +709,7 @@ def train_one_epoch(
     batch_time_m = AverageMeter()
     data_time_m = AverageMeter()
     losses_m = AverageMeter()
+    top1_m = AverageMeter()
 
     model.train()
 
@@ -732,9 +734,20 @@ def train_one_epoch(
         with amp_autocast():
             output = model(input)
             loss = loss_fn(output, target)
+        
+        # print(output.shape, target.shape)
+        # sys.exit()
+        # acc1, acc5 = accuracy(output, target, topk=(1, 5))
+
         # print(output.shape)  # torch.Size([128, 1000])
         if not args.distributed:
             losses_m.update(loss.item(), input.size(0))
+        # if args.distributed:
+        #     acc1 = reduce_tensor(acc1, args.world_size)
+            # acc5 = reduce_tensor(acc5, args.world_size)
+        
+ 
+        # top1_m.update(acc1.item(), output.size(0))
 
         optimizer.zero_grad()
         if loss_scaler is not None:
@@ -803,7 +816,7 @@ def train_one_epoch(
     if hasattr(optimizer, 'sync_lookahead'):
         optimizer.sync_lookahead()
 
-    return OrderedDict([('loss', losses_m.avg)])
+    return OrderedDict([('loss', losses_m.avg),]) #  ('top1', top1_m.avg)])
 
 
 def validate(model, loader, loss_fn, args, amp_autocast=suppress, log_suffix=''):
@@ -837,6 +850,7 @@ def validate(model, loader, loss_fn, args, amp_autocast=suppress, log_suffix='')
                 target = target[0:target.size(0):reduce_factor]
 
             loss = loss_fn(output, target)
+
             acc1, acc5 = accuracy(output, target, topk=(1, 5))
 
             if args.distributed:
@@ -845,6 +859,7 @@ def validate(model, loader, loss_fn, args, amp_autocast=suppress, log_suffix='')
                 acc5 = reduce_tensor(acc5, args.world_size)
             else:
                 reduced_loss = loss.data
+
 
             torch.cuda.synchronize()
 
